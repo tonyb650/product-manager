@@ -9,15 +9,11 @@ function ProductDetail(props) {
 
   const { id } = useParams();
   const [product, setProduct] = useState({});
-  // console.log(id);
 
   useEffect(() => {
     axios
       .get(`http://localhost:8000/api/products/${id}`) // using backticks in this way is call 'string interpolation'
       .then((product) => {
-        // console.log("success");
-        // console.log(product.data);
-        // console.log(product.data.price.toLocaleString("en-US"));
         setProduct(product.data);
       })
       .catch((err) => console.log(err));

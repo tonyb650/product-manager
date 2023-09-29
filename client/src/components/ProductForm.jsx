@@ -1,36 +1,28 @@
 import React from "react";
 import { useState } from "react";
-import axios from "axios";
+import DeleteButton from "./DeleteButton";
 
 function ProductForm(props) {
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const { productsList, setProductsList } = props;
+  const { initialTitle, initialPrice, initialDescription, onSubmitCallback, buttonTitle, id, onDeleteCallback } = props;
+  const [title, setTitle] = useState(initialTitle);
+  const [price, setPrice] = useState(initialPrice);
+  const [description, setDescription] = useState(initialDescription);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("form submitted");
-    axios
-      .post("http://localhost:8000/api/products", {
-        //notice the shorthand syntax for the following fields
-        title,
-        price,
-        description,
-      })
-      .then((res) => {
-        console.log(res.data);
-        setProductsList([...productsList, res.data]);
-        setTitle("");
-        setPrice("");
-        setDescription("");
-      })
-      .catch((err) => console.log(err));
+    onSubmitCallback({
+          title,
+          price,
+          description
+        })
+    setTitle("");
+    setPrice("");
+    setDescription("");
   };
 
   return (
     <>
-      <h1 className="h3 my-3 fw-normal">Add Product</h1>
+      
       <form onSubmit={handleSubmit}>
         <div className="form-outline mb-2">
           <input
@@ -71,9 +63,10 @@ function ProductForm(props) {
             Description
           </label>
         </div>
-        <button type="submit" className="btn btn-success w-50 my-2">
-          Add product
+        <button type="submit" className="btn btn-success w-50 my-2 me-2">
+          {buttonTitle}
         </button>
+        { buttonTitle != "Add product" ? <DeleteButton id={id} onDeleteCallback={onDeleteCallback}/> : null}
       </form>
     </>
   );
